@@ -8,27 +8,39 @@ namespace TestDataGeneratorLib.DataSource.DBDataSource
 {
     abstract class DBDataSource : IDataSource
     {
-        private DatabaseInfo dbInfo;
+        private ConnectionEntity dbInfo;
 
-        protected DBDataSource(DatabaseInfo dbInfo)
+        protected DBDataSource(ConnectionEntity dbInfo)
         {
             this.dbInfo = dbInfo;
         }
 
-        public List<DataTable> GetData(List<Table> tables, int numberOfRows)
+        //public List<DataTable> FillData(List<TableEntity> tables, int numberOfRows)
+        //{
+        //    using (var connection = new OdbcConnection(dbInfo.ConnectionString))
+        //    {
+        //        return tables.Select(r =>
+        //        {
+        //            var dataTable = new DataTable();
+        //            var adapter = new OdbcDataAdapter(CreateSelectCommand(r, numberOfRows), connection);
+        //            adapter.Fill(dataTable);
+        //            return dataTable;
+        //        }).ToList();
+        //    }
+        //}
+
+        public void FillData(List<DataTable> tables, int numberOfRows)
         {
             using (var connection = new OdbcConnection(dbInfo.ConnectionString))
             {
-                return tables.Select(r =>
+                tables.ForEach(t =>
                 {
-                    var dataTable = new DataTable();
-                    var adapter = new OdbcDataAdapter(CreateSelectCommand(r, numberOfRows), connection);
-                    adapter.Fill(dataTable);
-                    return dataTable;
-                }).ToList();
+                    var adapter = new OdbcDataAdapter(CreateSelectCommand(t, numberOfRows), connection);
+                    adapter.Fill(t);
+                });
             }
         }
 
-        protected abstract string CreateSelectCommand(Table table, int numberOfRows);
+        protected abstract string CreateSelectCommand(DataTable table, int numberOfRows);
     }
 }

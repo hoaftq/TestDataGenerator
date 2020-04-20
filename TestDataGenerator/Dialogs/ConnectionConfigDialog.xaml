@@ -1,0 +1,127 @@
+﻿<Window x:Class="TestDataGenerator.Dialogs.ConnectionConfigDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestDataGenerator"
+        mc:Ignorable="d"
+        Title="Database Connections" Height="350" Width="710"
+        WindowStartupLocation="CenterOwner"
+        Loaded="Window_Loaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--<RowDefinition Height="Auto"></RowDefinition>-->
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--<ToolBar>
+            <ToolBar.Resources>
+                <Style TargetType="Image">
+                    <Setter Property="Width" Value="20"></Setter>
+                </Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Margin" Value="5,0,0,0"></Setter>
+                </Style>
+            </ToolBar.Resources>
+            <Button Command="{Binding ViewModel.SaveCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="..\Assets\Save.png"/>
+                    <TextBlock Text="Save"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding ViewModel.LoadCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="..\Assets\Load.png"></Image>
+                    <TextBlock Text="Load"></TextBlock>
+                </StackPanel>
+            </Button>
+        </ToolBar>-->
+        <DataGrid Name="sourceDataGrid"
+                  ItemsSource="{Binding Connections}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="True"
+                  CanUserDeleteRows="True"
+                  AlternationCount="1"
+                  AlternatingRowBackground="AliceBlue"
+                  InitializingNewItem="sourceDataGrid_InitializingNewItem">
+            <DataGrid.Resources>
+                <Style x:Key="errorStyle" TargetType="{x:Type TextBox}">
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <DataTemplate x:Key="connectionStringTemplate">
+                    <TextBlock Text="{Binding ConnectionString}"></TextBlock>
+                </DataTemplate>
+                <DataTemplate x:Key="connectionStringEditingTemplate">
+                    <DockPanel LastChildFill="True">
+                        <Button Content="..."
+                                DockPanel.Dock="Right"
+                                Padding="5,0,5,0"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ViewModel.BuildConnectionCommand}"
+                                CommandParameter="{Binding}">
+                        </Button>
+                        <TextBox Text="{Binding ConnectionString, Mode=TwoWay}"
+                                 Name="ConnectionString"></TextBox>
+                    </DockPanel>
+                </DataTemplate>
+            </DataGrid.Resources>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Remove Selected Rows"
+                              Command="{Binding ViewModel.RemoveSelectedRowsCommand}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"
+                              ></MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.Columns>
+                <DataGridComboBoxColumn Header="Database Kind"
+                                        SelectedItemBinding="{Binding Kind, Mode=TwoWay}"
+                                        ItemsSource="{Binding Source={StaticResource dbKindEnum}}" />
+                <!--<DataGridTextColumn Header="Connection Name" EditingElementStyle="{StaticResource errorStyle}">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="ConnectionName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"  ValidatesOnDataErrors="">
+                            <Binding.ValidationRules>
+                                <local:EmptyValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>-->
+                <DataGridTextColumn Header="Connection Name"
+                                    Binding="{Binding ConnectionName, Mode=TwoWay, ValidatesOnDataErrors=True}"
+                                    EditingElementStyle="{StaticResource errorStyle}" />
+
+                <!--<DataGridTextColumn x:Name="connectionStringCol"
+                                    Header="Connection String"
+                                    Binding="{Binding ConnectionString, Mode=TwoWay, ValidatesOnDataErrors=True}"
+                                    Width="*"/>-->
+                <DataGridTemplateColumn Header="Connection String"
+                                        CellTemplate="{StaticResource connectionStringTemplate}"
+                                        CellEditingTemplate="{StaticResource connectionStringEditingTemplate}"
+                                        Width="*"></DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,5,0,5">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="100"></Setter>
+                    <Setter Property="Height" Value="22"></Setter>
+                    <Setter Property="Margin" Value="0,0,10,0"></Setter>
+                </Style>
+            </StackPanel.Resources>
+            <Button Content="Cancel"
+                    Command="{Binding ViewModel.CancelCommand}">
+            </Button>
+            <Button Content="OK"
+                    Command="{Binding ViewModel.OKCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+        </StackPanel>
+    </Grid>
+</Window>

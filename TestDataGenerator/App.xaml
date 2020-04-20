@@ -1,0 +1,24 @@
+﻿<Application x:Class="TestDataGenerator.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TestDataGenerator"
+             xmlns:core="clr-namespace:System;assembly=mscorlib"
+             xmlns:commonlib="clr-namespace:TestDataGeneratorLib.Common;assembly=TestDataGeneratorLib"
+             xmlns:converters="clr-namespace:TestDataGenerator.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ObjectDataProvider x:Key="dbKindEnum" ObjectType="{x:Type core:Enum}" MethodName="GetValues" >
+            <ObjectDataProvider.MethodParameters>
+                <x:Type Type="commonlib:DatabaseKind"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="writerKindEnum" ObjectType="{x:Type core:Enum}" MethodName="GetValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type Type="commonlib:WriterKind"></x:Type>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <converters:EnumDescriptionConverter x:Key="enumDescriptionConverter">
+        </converters:EnumDescriptionConverter>
+        <local:EmptyValidationRule x:Key="emptyValidateionRule"/>
+    </Application.Resources>
+</Application>

@@ -3,42 +3,43 @@ using System.Data;
 using System.Data.Odbc;
 using System.Linq;
 using TestDataGeneratorLib.Entity;
+using TestDataGeneratorLib.Utils;
 
 namespace TestDataGeneratorLib.Reader
 {
     public abstract class MetaDBReader
     {
-        public string DBname { get; set; }
+        protected ConnectionEntity dbInfo;
 
-        private string ConnectionString { get; set; }
-
-        public MetaDBReader(string dbName, string connectionString)
+        public MetaDBReader(ConnectionEntity dbInfo)
         {
-            DBname = dbName;
-            ConnectionString = connectionString;
+            this.dbInfo = dbInfo;
         }
 
-        public List<Table> GetTables()
+        public IEnumerable<TableEntity> GetAllTables()
         {
-            using (var connection = new OdbcConnection(ConnectionString))
+            using (var connection = new OdbcConnection(dbInfo.ConnectionString))
             {
+                connection.Open();
                 var dataTable = connection.GetSchema("Tables");
-                return dataTable.AsEnumerable().Select(r => CreateTableInfo(r)).ToList();
+                return dataTable.AsEnumerable().Select(r => CreateTableInfo(r));
             }
         }
 
-        public DataTable GetTableInfo(Table table)
+        public DataTable GetTableMetaData(TableEntity table)
         {
             var dataTable = new DataTable();
-            using (var adapter = new OdbcDataAdapter(CreateSelectCommand(table), ConnectionString))
+            using (var adapter = new OdbcDataAdapter(CreateSelectCommand(table), dbInfo.ConnectionString))
             {
                 adapter.FillSchema(dataTable, SchemaType.Source);
             }
+
+            dataTable.SetExtendedTableInfo(table);
             return dataTable;
         }
 
-        protected abstract Table CreateTableInfo(DataRow row);
+        protected abstract TableEntity CreateTableInfo(DataRow row);
 
-        protected abstract string CreateSelectCommand(Table table);
+        protected abstract string CreateSelectCommand(TableEntity table);
     }
 }

@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestDataGeneratorLib.DataSource.Generator.FieldGenerator
 {
-    class StringGenerator : IFieldGenerator
+    public class StringGenerator : IFieldGenerator
     {
+        private const int MAX_LENGTH = 1000;
+
         private string startString;
 
         public StringGenerator(string startString)
@@ -18,7 +16,8 @@ namespace TestDataGeneratorLib.DataSource.Generator.FieldGenerator
 
         public object NextValue(DataColumn colum, int rowIndex, DataRow previousRow)
         {
-            throw new NotImplementedException();
+            var endString = (++rowIndex).ToString();
+            return startString + endString.PadLeft(Math.Min(colum.MaxLength, MAX_LENGTH) - startString.Length, '0');
         }
     }
 }

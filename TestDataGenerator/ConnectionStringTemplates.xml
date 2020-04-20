@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfConnectionStringTemplatesEntity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ConnectionStringTemplatesEntity>
+    <DatabaseKind>LocalDB</DatabaseKind>
+    <Templates>
+      <Template>
+        <ConnectionStringTemplate>Template 1</ConnectionStringTemplate>
+        <Description>d 1</Description>
+      </Template>
+      <Template>
+        <ConnectionStringTemplate>Template 2</ConnectionStringTemplate>
+        <Description>d 2</Description>
+      </Template>
+      <Template>
+        <ConnectionStringTemplate>Template 3</ConnectionStringTemplate>
+        <Description>d 3</Description>
+      </Template>
+    </Templates>
+  </ConnectionStringTemplatesEntity>
+  <ConnectionStringTemplatesEntity>
+    <DatabaseKind>MSSQL</DatabaseKind>
+    <Templates>
+      <Template>
+        <ConnectionStringTemplate>Template x1</ConnectionStringTemplate>
+        <Description>d x1</Description>
+      </Template>
+      <Template>
+        <ConnectionStringTemplate>Template x2</ConnectionStringTemplate>
+        <Description>d x2</Description>
+      </Template>
+    </Templates>
+  </ConnectionStringTemplatesEntity>
+</ArrayOfConnectionStringTemplatesEntity>

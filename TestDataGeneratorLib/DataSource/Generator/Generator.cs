@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestDataGeneratorLib.DataSource.Generator.FieldGenerator;
 using TestDataGeneratorLib.Entity;
-using TestDataGeneratorLib.Reader;
 
 namespace TestDataGeneratorLib.DataSource.Generator
 {
@@ -14,30 +9,34 @@ namespace TestDataGeneratorLib.DataSource.Generator
     {
         private const string GeneratorExtendedKey = "Generator";
 
-        private DatabaseInfo dbInfo;
+        // TODO not used yet
+        private readonly ConnectionEntity dbInfo;
 
-        private DefaultFieldGeneratorSelector generatorSelector;
+        private readonly IFieldGeneratorSelector generatorSelector;
 
-        public Generator(DatabaseInfo dbInfo, DefaultFieldGeneratorSelector generatorSelector)
+        public Generator(ConnectionEntity dbInfo, IFieldGeneratorSelector generatorSelector)
         {
             this.dbInfo = dbInfo;
             this.generatorSelector = generatorSelector;
         }
 
-        public List<DataTable> GetData(List<Table> tables, int numberOfRows)
+        public void FillData(List<DataTable> tables, int numberOfRows)
         {
-            return tables.Select((r, index) => GenerateTable(r, index, numberOfRows)).ToList();
+            for (int i = 0; i < tables.Count; i++)
+            {
+                FillData(tables, i, numberOfRows);
+            }
         }
 
-        private DataTable GenerateTable(List<Table> tables, int tableIndex, int numberOfRows)
+        private void FillData(List<DataTable> targetTables, int tableIndex, int numberOfRows)
         {
-            var readerFactory = new MetaDBReaderFactory();
-            var reader = readerFactory.CreateReader(dbInfo);
+            var dataTable = targetTables[tableIndex];
+            dataTable.Rows.Clear();
 
-            var dataTable = reader.GetTableInfo(tables[tableIndex]);
             for (int i = 0; i < dataTable.Columns.Count; i++)
             {
-                var generator = generatorSelector.DecideFieldGenerator(dataTable.Columns[i], i, tables, tableIndex);
+                var generator = generatorSelector.DecideFieldGenerator(dataTable.Columns[i], i, targetTables, tableIndex);
+                dataTable.Columns[i].ExtendedProperties.Remove(GeneratorExtendedKey);
                 dataTable.Columns[i].ExtendedProperties.Add(GeneratorExtendedKey, generator);
             }
 
@@ -51,10 +50,9 @@ namespace TestDataGeneratorLib.DataSource.Generator
                     dataRow[column] = generator.NextValue(column, i, prevRow);
                 }
 
+                dataTable.Rows.Add(dataRow);
                 prevRow = dataRow;
             }
-
-            return dataTable;
         }
     }
 }

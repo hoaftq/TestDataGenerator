@@ -2,7 +2,7 @@
 
 namespace TestDataGeneratorLib.DataSource.Generator.FieldGenerator
 {
-    interface IFieldGenerator
+    public interface IFieldGenerator
     {
         object NextValue(DataColumn colum, int rowIndex, DataRow previousRow);
     }

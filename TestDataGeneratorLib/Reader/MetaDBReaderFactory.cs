@@ -6,12 +6,14 @@ namespace TestDataGeneratorLib.Reader
 {
     public class MetaDBReaderFactory
     {
-        public MetaDBReader CreateReader(DatabaseInfo dbInfo)
+        public MetaDBReader CreateReader(ConnectionEntity connectionInfo)
         {
-            switch (dbInfo.Kind)
+            switch (connectionInfo.Kind)
             {
                 case DatabaseKind.MSSQL:
-                    return new MSSQLMetaReader(dbInfo.DisplayName, dbInfo.ConnectionString);
+                    return new MSSQLMetaReader(connectionInfo);
+                case DatabaseKind.LocalDB:
+                    return new LocalDBMetaReader(connectionInfo);
             }
 
             throw new NotSupportedException();

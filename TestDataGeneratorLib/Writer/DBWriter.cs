@@ -9,7 +9,7 @@ namespace TestDataGeneratorLib.Writer
 {
     class DBWriter : IWriter
     {
-        public object GetOutputContent(List<DataTable> tables)
+        public object Write(List<DataTable> tables)
         {
             throw new NotImplementedException();
         }

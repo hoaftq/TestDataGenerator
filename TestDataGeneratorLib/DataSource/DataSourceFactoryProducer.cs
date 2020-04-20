@@ -7,7 +7,7 @@ namespace TestDataGeneratorLib.DataSource
 {
     public class DataSourceFactoryProducer
     {
-        public IDataSourceFactory CreateDataSource(DataSourceType type, DatabaseInfo dbInfo)
+        public IDataSourceFactory CreateDataSource(DataSourceType type, ConnectionEntity dbInfo)
         {
             switch (type)
             {

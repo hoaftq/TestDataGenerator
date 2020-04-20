@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestDataGeneratorLib.Entity;
+﻿using TestDataGeneratorLib.Entity;
 
 namespace TestDataGeneratorLib.DataSource.Generator
 {
     class GeneratorDataSourceFactory : IDataSourceFactory
     {
-        private DatabaseInfo dbInfo;
+        private readonly ConnectionEntity dbInfo;
 
-        public GeneratorDataSourceFactory(DatabaseInfo dbInfo)
+        private readonly IFieldGeneratorSelector fieldGeneratorSelector;
+
+        public GeneratorDataSourceFactory(ConnectionEntity dbInfo, IFieldGeneratorSelector fieldGeneratorSelector = null)
         {
             this.dbInfo = dbInfo;
+            this.fieldGeneratorSelector = fieldGeneratorSelector ?? new DefaultFieldGeneratorSelector();
         }
 
         public IDataSource CreateDataSource()
         {
-            return new Generator(dbInfo);
+            return new Generator(dbInfo, fieldGeneratorSelector);
         }
     }
 }

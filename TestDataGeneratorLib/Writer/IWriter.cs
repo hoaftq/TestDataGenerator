@@ -3,8 +3,8 @@ using System.Data;
 
 namespace TestDataGeneratorLib.Writer
 {
-    interface IWriter
+    public interface IWriter
     {
-        object GetOutputContent(List<DataTable> tables);
+        object Write(List<DataTable> tables);
     }
 }

@@ -1,0 +1,180 @@
+﻿<Window x:Class="TestDataGenerator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestDataGenerator"
+        xmlns:converters="clr-namespace:TestDataGenerator.Converters"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Test Data Generator" Height="594" Width="800" WindowStartupLocation="CenterScreen" Icon="AppIcon.png"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <converters:FixedValueConverter x:Key="maxLengthConverter">
+            <converters:FixedValueConverter.Value>
+                <sys:Int32>-1</sys:Int32>
+            </converters:FixedValueConverter.Value>
+            <converters:FixedValueConverter.NewValue>
+                <x:Null/>
+            </converters:FixedValueConverter.NewValue>
+        </converters:FixedValueConverter>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <ToolBarTray Grid.ColumnSpan="2">
+            <ToolBar>
+                <Button Command="{Binding SettingCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Assets\Setting.jpg" Width="20"/>
+                        <TextBlock Text="Connection Setting" Margin="5,0,0,0"></TextBlock>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+
+        <DockPanel Grid.Row="1">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        DockPanel.Dock="Bottom">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Width" Value="40"/>
+                        <Setter Property="Height" Value="22"/>
+                        <Setter Property="Margin" Value="0,0,5,0"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button ToolTip="Move table up"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding UpCommand}">
+                    <Image Source="/Assets/Up-24.png"></Image>
+                </Button>
+                <Button ToolTip="Move table down"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding DownCommand}">
+                    <Image Source="/Assets/Down-24.png"></Image>
+                </Button>
+                <Button ToolTip="Remove table"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding RemoveCommand}">
+                    <Image Source="/Assets/Remove-24.png"></Image>
+                </Button>
+                <Button ToolTip="Add or remove tables"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding ChangeCommand}">
+                    <Image Source="/Assets/Edit-24.png"></Image>
+                </Button>
+            </StackPanel>
+            <ListView ItemsSource="{Binding Tables}"
+                      DockPanel.Dock="Top"
+                      Margin="0,0,5,0"
+                      SelectedItem="{Binding SelectedTable, Mode=TwoWay}"
+                      SelectionMode="Single">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Table name" DisplayMemberBinding="{Binding TableName}"/>
+                        <GridViewColumn Header="Schema" DisplayMemberBinding="{Binding Schema}"/>
+                        <GridViewColumn Header="Database" DisplayMemberBinding="{Binding DatabaseName}"/>
+                        <GridViewColumn Header="Table type" DisplayMemberBinding="{Binding TableType}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
+        <ListView Grid.Row="1"
+                  Grid.Column="1"
+                  ItemsSource="{Binding SelectedDataTable.Columns}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Column Name" DisplayMemberBinding="{Binding ColumnName}"/>
+                    <GridViewColumn Header="Column Type" DisplayMemberBinding="{Binding DataType}"/>
+                    <GridViewColumn Header="Max Length" DisplayMemberBinding="{Binding MaxLength, Converter={StaticResource maxLengthConverter}}"/>
+                    <GridViewColumn Header="Allow Null">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding AllowDBNull}"
+                                          IsEnabled="False"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Default Value" DisplayMemberBinding="{Binding DefaultValue}"/>
+                    <GridViewColumn Header="Auto Increment">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding AutoIncrement}"
+                                          IsEnabled="False"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <DataGrid Grid.Row="2"
+                  Grid.ColumnSpan="2"
+                  ItemsSource="{Binding SelectedDataTable, Mode=OneWay}">
+        </DataGrid>
+        <!--<DataGrid Grid.Row="2"
+                  Grid.ColumnSpan="2">
+        </DataGrid>-->
+
+        <DockPanel Grid.Row="3"
+                   Grid.ColumnSpan="2"
+                   LastChildFill="False"
+                   Margin="0,5,0,0">
+            <TextBlock Text="Number of rows"
+                       Margin="0,0,5,0"/>
+            <TextBox Width="50"
+                     DockPanel.Dock="Left"
+                     Margin="0,0,10,0"
+                     Text="{Binding RowsCount, Mode=TwoWay, StringFormat=d, ValidatesOnExceptions=True}"/>
+            <Button Content="Generate"
+                    Width="100"
+                    DockPanel.Dock="Left"
+                    Command="{Binding GenerateCommand}"
+                    />
+
+            <Button Content="Output"
+                    Width="100"
+                    DockPanel.Dock="Right"
+                    Command="{Binding OutputCommand}"
+                    CommandParameter="{Binding ElementName=writerKindComboBox, Path=SelectedItem}"/>
+            <ComboBox DockPanel.Dock="Right"
+                      Width="150"
+                      Margin="0,0,5,0"
+                      SelectedIndex="0"
+                      ItemsSource="{Binding Source={StaticResource writerKindEnum}}"
+                      Name="writerKindComboBox">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource enumDescriptionConverter}}"></TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </DockPanel>
+
+        <GridSplitter Grid.Row="1"
+                      Grid.Column="0"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Stretch"
+                      Background="DarkGray"
+                      Width="5">
+        </GridSplitter>
+        <GridSplitter Grid.Row="2"
+                      Grid.ColumnSpan="2"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Top"
+                      Background="DarkGray"
+                      Height="5"
+                      ResizeDirection="Rows">
+        </GridSplitter>
+    </Grid>
+</Window>

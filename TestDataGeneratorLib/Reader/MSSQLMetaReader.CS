@@ -5,20 +5,21 @@ namespace TestDataGeneratorLib.Reader
 {
     class MSSQLMetaReader : MetaDBReader
     {
-        public MSSQLMetaReader(string dbName, string connectionString) : base(dbName, connectionString)
+        public MSSQLMetaReader(ConnectionEntity dbInfo) : base(dbInfo)
         {
         }
 
-        protected override string CreateSelectCommand(Table table)
+        protected override string CreateSelectCommand(TableEntity table)
         {
             return $"SELECT * FROM [{table.Schema}].[{table.TableName}]";
         }
 
-        protected override Table CreateTableInfo(DataRow row)
+        protected override TableEntity CreateTableInfo(DataRow row)
         {
-            return new Table()
+            return new TableEntity()
             {
-                DBName = row["TABLE_CAT"].ToString(),
+                ConnectionInfo = dbInfo,
+                DatabaseName = row["TABLE_CAT"].ToString(),
                 Schema = row["TABLE_SCHEM"].ToString(),
                 TableName = row["TABLE_NAME"].ToString(),
                 TableType = row["TABLE_TYPE"].ToString()

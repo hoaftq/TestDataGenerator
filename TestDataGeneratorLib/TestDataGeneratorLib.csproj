@@ -42,11 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DatabaseKind.cs" />
+    <Compile Include="Common\WriterKind.cs" />
+    <Compile Include="Reader\LocalDBMetaReader.cs" />
+    <Compile Include="Utils\BindableObject.cs" />
+    <Compile Include="Utils\DataTableExtensions.cs" />
     <Compile Include="DataSource\DBDataSource\MSSQLDataSource.cs" />
     <Compile Include="DataSource\Generator\DefaultFieldGeneratorSelector.cs" />
-    <Compile Include="DataSource\Generator\FieldGenerator\DateGenerator.cs" />
+    <Compile Include="DataSource\Generator\FieldGenerator\DateTimeGenerator.cs" />
     <Compile Include="DataSource\Generator\FieldGenerator\DecimalGenerator.cs" />
-    <Compile Include="DataSource\Generator\FieldGenerator\FixedValueGenerator.cs" />
     <Compile Include="DataSource\Generator\FieldGenerator\FixedValuesGenerator.cs" />
     <Compile Include="DataSource\Generator\FieldGenerator\IFieldGenerator.cs" />
     <Compile Include="DataSource\Generator\FieldGenerator\IntergerGenerator.cs" />
@@ -58,20 +61,22 @@
     <Compile Include="DataSource\DataSourceFactoryProducer.cs" />
     <Compile Include="DataSource\DataSourceType.cs" />
     <Compile Include="DataSource\DBDataSource\DBDataSourceFactory.cs" />
-    <Compile Include="Entity\DatabaseInfo.cs" />
-    <Compile Include="Entity\Table.cs" />
+    <Compile Include="Entity\ConnectionEntity.cs" />
+    <Compile Include="Entity\TableEntity.cs" />
     <Compile Include="DataSource\DBDataSource\DBDataSource.cs" />
     <Compile Include="DataSource\IDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reader\MetaDBReaderFactory.cs" />
     <Compile Include="Reader\MSSQLMetaReader.cs" />
     <Compile Include="Reader\MetaDBReader.cs" />
-    <Compile Include="Writer\DBWriter.cs" />
-    <Compile Include="Writer\IWriter.cs" />
+    <Compile Include="Utils\DBUtil.cs" />
+    <Compile Include="Writer\ExcelWriter.cs" />
     <Compile Include="Writer\SQLWriter.cs" />
+    <Compile Include="Writer\IWriter.cs" />
+    <Compile Include="Writer\DBWriter.cs" />
+    <Compile Include="Writer\TabDelimitedWriter.cs" />
+    <Compile Include="Writer\WriterFactory.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,7 +10,7 @@ namespace TestDataGeneratorLib.DataSource.Generator
 {
     class DefaultFieldGeneratorSelector : IFieldGeneratorSelector
     {
-        public IFieldGenerator DecideFieldGenerator(DataColumn column, int columnIndex, List<DataTable> allTables, int tableIndex)
+        public IFieldGenerator DecideFieldGenerator(DataColumn column, int columnIndex, List<DataTable> targetTables, int tableIndex)
         {
             if (column.DataType == typeof(string))
             {
@@ -22,7 +22,22 @@ namespace TestDataGeneratorLib.DataSource.Generator
                 return new DecimalGenerator();
             }
 
-            return null;
+            if (column.DataType == typeof(short))
+            {
+                return new IntergerGenerator();
+            }
+
+            if (column.DataType == typeof(int))
+            {
+                return new IntergerGenerator();
+            }
+
+            if (column.DataType == typeof(DateTime))
+            {
+                return new DateTimeGenerator();
+            }
+
+            throw new NotSupportedException();
         }
     }
 }

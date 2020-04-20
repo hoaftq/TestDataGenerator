@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace TestDataGeneratorLib.DataSource.Generator.FieldGenerator
 {
-    class DecimalGenerator : IFieldGenerator
+    public class DecimalGenerator : IFieldGenerator
     {
         public object NextValue(DataColumn colum, int rowIndex, DataRow previousRow)
         {
-            throw new NotImplementedException();
+            return rowIndex;
         }
     }
 }

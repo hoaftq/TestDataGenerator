@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace TestDataGeneratorLib.DataSource.Generator.FieldGenerator
 {
-    class IntergerGenerator : IFieldGenerator
+    public class IntergerGenerator : IFieldGenerator
     {
-        public object NextValue(DataColumn colum, int rowIndex, DataRow previousRow)
+        private int startValue;
+
+        private int step;
+
+        public IntergerGenerator(int startValue = 1, int step = 1)
         {
-            throw new NotImplementedException();
+            this.startValue = startValue;
+            this.step = step;
+        }
+
+        public object NextValue(DataColumn column, int rowIndex, DataRow previousRow)
+        {
+            // TODO
+            //int prevValue = (int?)previousRow?[column] ?? startValue - step;
+            //return prevValue + step;
+            return rowIndex;
         }
     }
 }

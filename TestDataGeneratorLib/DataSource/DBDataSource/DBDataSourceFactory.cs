@@ -6,9 +6,9 @@ namespace TestDataGeneratorLib.DataSource.DBDataSource
 {
     class DBDataSourceFactory : IDataSourceFactory
     {
-        private DatabaseInfo dbInfo;
+        private ConnectionEntity dbInfo;
 
-        public DBDataSourceFactory(DatabaseInfo dbInfo)
+        public DBDataSourceFactory(ConnectionEntity dbInfo)
         {
             this.dbInfo = dbInfo;
         }

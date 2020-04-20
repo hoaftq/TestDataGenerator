@@ -6,6 +6,6 @@ namespace TestDataGeneratorLib.DataSource.Generator
 {
     interface IFieldGeneratorSelector
     {
-        IFieldGenerator DecideFieldGenerator(DataColumn column, int columnIndex, List<DataTable> allTables, int tableIndex);
+        IFieldGenerator DecideFieldGenerator(DataColumn column, int columnIndex, List<DataTable> targetTables, int tableIndex);
     }
 }
