@@ -17,21 +17,21 @@ namespace TestDataGenerator.Models
             IsSelected = isSelected;
         }
 
-        public override bool Equals(object obj)
-        {
-            var o = obj as TableModel;
-            return o != null
-                   && ConnectionInfo == o.ConnectionInfo
-                   && DatabaseName == o.DatabaseName
-                   && Schema == o.Schema
-                   && TableName == o.TableName
-                   && TableType == o.TableType;
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    var o = obj as TableModel;
+        //    return o != null
+        //           && ConnectionInfo == o.ConnectionInfo
+        //           && DatabaseName == o.DatabaseName
+        //           && Schema == o.Schema
+        //           && TableName == o.TableName
+        //           && TableType == o.TableType;
+        //}
 
-        public override int GetHashCode()
-        {
-            string str = ConnectionInfo.ConnectionName + Schema + TableName + TableType;
-            return str.GetHashCode();
-        }
+        //public override int GetHashCode()
+        //{
+        //    string str = ConnectionInfo.ConnectionName + Schema + TableName + TableType;
+        //    return str.GetHashCode();
+        //}
     }
 }

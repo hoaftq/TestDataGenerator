@@ -75,6 +75,7 @@
     <Compile Include="Writer\IWriter.cs" />
     <Compile Include="Writer\DBWriter.cs" />
     <Compile Include="Writer\TabDelimitedWriter.cs" />
+    <Compile Include="Writer\WriterBase.cs" />
     <Compile Include="Writer\WriterFactory.cs" />
   </ItemGroup>
   <ItemGroup />

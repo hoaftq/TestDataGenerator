@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace TestDataGeneratorLib.Writer
 {
@@ -11,7 +9,33 @@ namespace TestDataGeneratorLib.Writer
     {
         public object Write(List<DataTable> tables)
         {
-            throw new NotImplementedException();
+            StringBuilder builder = new StringBuilder();
+            tables.ForEach(t =>
+            {
+                builder.AppendLine($"Table {t.TableName}");
+                BuildTableOutput(t, builder);
+                builder.AppendLine();
+            });
+
+            return builder.ToString();
+        }
+
+        private void BuildTableOutput(DataTable table, StringBuilder builder)
+        {
+            BuildLine(table.Columns.Cast<DataColumn>(), builder);
+            foreach (DataRow row in table.Rows)
+            {
+                BuildLine(table.Columns.Cast<DataColumn>().Select(c => row[c]), builder);
+            }
+        }
+
+        private void BuildLine(IEnumerable<object> items, StringBuilder builder)
+        {
+            foreach (var item in items)
+            {
+                builder.AppendFormat("{0}\t", item);
+            }
+            builder.Remove(builder.Length - 1, 1).AppendLine();
         }
     }
 }

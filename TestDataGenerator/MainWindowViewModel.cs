@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using TestDataGenerator.Common;
 using TestDataGenerator.Dialogs;
@@ -21,25 +19,18 @@ namespace TestDataGenerator
 {
     class MainWindowViewModel : BindableObject
     {
-        private ObservableCollection<ConnectionModel> connections;
+        private const int DEFAULT_GENERATE_ROW_COUNT = 5;
 
         private MainWindow view;
 
+        private ObservableCollection<ConnectionModel> connections;
+
         public ObservableCollection<TableModel> Tables { get; set; } = new ObservableCollection<TableModel>();
 
-
+        /// <summary>
+        /// Store both meta data and generated data
+        /// </summary>
         public ObservableCollection<DataTable> TablesData { get; set; } = new ObservableCollection<DataTable>();
-
-        //private DataTable tableDetail;
-        //public DataTable TableDetail
-        //{
-        //    get => tableDetail;
-        //    set
-        //    {
-        //        tableDetail = value;
-        //        NotifyPropertyChanged();
-        //    }
-        //}
 
         private TableModel selectedTable;
         public TableModel SelectedTable
@@ -55,7 +46,7 @@ namespace TestDataGenerator
 
         public DataTable SelectedDataTable => TablesData.FirstOrDefault(r => r.GetExtendedTableInfo() == selectedTable);
 
-        public int RowsCount { get; set; } = 5;
+        public int RowsCount { get; set; } = DEFAULT_GENERATE_ROW_COUNT;
 
         public MainWindowViewModel(MainWindow view)
         {
@@ -155,7 +146,7 @@ namespace TestDataGenerator
 
             var factory = new WriterFactory();
             var writer = factory.CreateWriter(writerKind);
-            var output = writer.Write(TablesData.ToList());
+            var output = writer.Write(GetOrderedTablesData().ToList());
 
             switch (writerKind)
             {
@@ -163,6 +154,7 @@ namespace TestDataGenerator
                     MessageBox.Show(output as string);
                     break;
                 case WriterKind.TabDelimitedText:
+                    MessageBox.Show(output as string);
                     break;
                 case WriterKind.ExcelFile:
                     break;
@@ -170,5 +162,13 @@ namespace TestDataGenerator
                     break;
             }
         });
+
+        private IEnumerable<DataTable> GetOrderedTablesData()
+        {
+            foreach (var table in Tables)
+            {
+                yield return TablesData.First(t => t.GetExtendedTableInfo().Equals(table));
+            }
+        }
     }
 }

@@ -11,8 +11,17 @@ namespace TestDataGeneratorLib.Writer
         public object Write(List<DataTable> tables)
         {
             var builder = new StringBuilder();
-            tables.ForEach(t =>
+            string prevConnecitonName = null;
+            foreach (var t in tables.OrderBy(t => t.GetExtendedTableInfo().ConnectionInfo.ConnectionName))
             {
+                var connectionInfo = t.GetExtendedTableInfo().ConnectionInfo;
+                if (prevConnecitonName != connectionInfo.ConnectionName)
+                {
+                    builder.AppendLine("-- " + connectionInfo.ConnectionName);
+                    builder.AppendLine("-- " + connectionInfo.ConnectionString);
+                    prevConnecitonName = connectionInfo.ConnectionName;
+                }
+
                 builder.AppendLine(BuildCommentForTable(t));
                 foreach (var dataRow in t.AsEnumerable())
                 {
@@ -20,7 +29,7 @@ namespace TestDataGeneratorLib.Writer
                 }
 
                 builder.AppendLine();
-            });
+            }
 
             return builder.ToString();
         }

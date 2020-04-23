@@ -14,6 +14,23 @@ namespace TestDataGeneratorLib.Entity
 
         public ConnectionEntity ConnectionInfo { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            var o = obj as TableEntity;
+            return o != null
+                   && ConnectionInfo == o.ConnectionInfo // Must have the same instance of ConnecitonEntity
+                   && DatabaseName == o.DatabaseName
+                   && Schema == o.Schema
+                   && TableName == o.TableName
+                   && TableType == o.TableType;
+        }
+
+        public override int GetHashCode()
+        {
+            string str = ConnectionInfo.ConnectionName + Schema + TableName + TableType;
+            return str.GetHashCode();
+        }
+
         //public override bool Equals(object obj)
         //{
         //    var entity = obj as TableEntity;
