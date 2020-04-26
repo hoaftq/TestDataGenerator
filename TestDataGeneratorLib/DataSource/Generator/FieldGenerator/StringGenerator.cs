@@ -17,7 +17,8 @@ namespace TestDataGeneratorLib.DataSource.Generator.FieldGenerator
         public object NextValue(DataColumn colum, int rowIndex, DataRow previousRow)
         {
             var endString = (++rowIndex).ToString();
-            return startString + endString.PadLeft(Math.Min(colum.MaxLength, MAX_LENGTH) - startString.Length, '0');
+            int length = colum.MaxLength < 0 || colum.MaxLength > MAX_LENGTH ? MAX_LENGTH : colum.MaxLength;
+            return startString + endString.PadLeft(length - startString.Length, '0');
         }
     }
 }

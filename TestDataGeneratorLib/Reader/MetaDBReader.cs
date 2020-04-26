@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
 using System.Linq;
@@ -18,11 +19,18 @@ namespace TestDataGeneratorLib.Reader
 
         public IEnumerable<TableEntity> GetAllTables()
         {
-            using (var connection = new OdbcConnection(dbInfo.ConnectionString))
+            try
             {
-                connection.Open();
-                var dataTable = connection.GetSchema("Tables");
-                return dataTable.AsEnumerable().Select(r => CreateTableInfo(r));
+                using (var connection = new OdbcConnection(dbInfo.ConnectionString))
+                {
+                    connection.Open();
+                    var dataTable = connection.GetSchema("Tables");
+                    return dataTable.AsEnumerable().Select(r => CreateTableInfo(r));
+                }
+            }
+            catch (OdbcException)
+            {
+                return null;
             }
         }
 

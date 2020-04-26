@@ -146,15 +146,15 @@ namespace TestDataGenerator
 
             var factory = new WriterFactory();
             var writer = factory.CreateWriter(writerKind);
-            var output = writer.Write(GetOrderedTablesData().ToList());
+            writer.Write(GetOrderedTablesData());
 
             switch (writerKind)
             {
                 case WriterKind.SQLCommandText:
-                    MessageBox.Show(output as string);
+                    MessageBox.Show(writer.Output as string);
                     break;
                 case WriterKind.TabDelimitedText:
-                    MessageBox.Show(output as string);
+                    MessageBox.Show(writer.Output as string);
                     break;
                 case WriterKind.ExcelFile:
                     break;

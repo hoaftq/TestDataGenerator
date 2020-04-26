@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace TestDataGeneratorLib.Writer
 {
-    class ExcelWriter : IWriter
+    class ExcelWriter : WriterBase
     {
-        public object Write(List<DataTable> tables)
+
+        protected override void WriteTable(DataTable table)
         {
             throw new NotImplementedException();
         }

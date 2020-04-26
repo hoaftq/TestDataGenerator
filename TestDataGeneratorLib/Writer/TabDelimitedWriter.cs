@@ -5,29 +5,46 @@ using System.Text;
 
 namespace TestDataGeneratorLib.Writer
 {
-    class TabDelimitedWriter : IWriter
+    class TabDelimitedWriter : WriterBase
     {
-        public object Write(List<DataTable> tables)
-        {
-            StringBuilder builder = new StringBuilder();
-            tables.ForEach(t =>
-            {
-                builder.AppendLine($"Table {t.TableName}");
-                BuildTableOutput(t, builder);
-                builder.AppendLine();
-            });
+        private StringBuilder builder = new StringBuilder();
 
-            return builder.ToString();
-        }
+        public override object Output => builder.ToString();
 
-        private void BuildTableOutput(DataTable table, StringBuilder builder)
+        //public object Write(List<DataTable> tables)
+        //{
+        //    StringBuilder builder = new StringBuilder();
+        //    tables.ForEach(t =>
+        //    {
+        //        builder.AppendLine($"Table {t.TableName}");
+        //        BuildTableOutput(t, builder);
+        //        builder.AppendLine();
+        //    });
+
+        //    return builder.ToString();
+        //}
+
+        //private void BuildTableOutput(DataTable table, StringBuilder builder)
+        //{
+        //    BuildLine(table.Columns.Cast<DataColumn>(), builder);
+        //    foreach (DataRow row in table.Rows)
+        //    {
+        //        BuildLine(table.Columns.Cast<DataColumn>().Select(c => row[c]), builder);
+        //    }
+        //}
+
+
+        protected override void WriteTable(DataTable table)
         {
+            builder.AppendLine($"Table {table.TableName}");
             BuildLine(table.Columns.Cast<DataColumn>(), builder);
             foreach (DataRow row in table.Rows)
             {
                 BuildLine(table.Columns.Cast<DataColumn>().Select(c => row[c]), builder);
             }
         }
+
+
 
         private void BuildLine(IEnumerable<object> items, StringBuilder builder)
         {

@@ -6,32 +6,26 @@ using TestDataGeneratorLib.Utils;
 
 namespace TestDataGeneratorLib.Writer
 {
-    class SQLWriter : IWriter
+    class SQLWriter : WriterBase
     {
-        public object Write(List<DataTable> tables)
+        private StringBuilder builder = new StringBuilder();
+
+        public override object Output => builder.ToString();
+
+        protected override void BeginConnection(IEnumerable<DataTable> tablesInConnection)
         {
-            var builder = new StringBuilder();
-            string prevConnecitonName = null;
-            foreach (var t in tables.OrderBy(t => t.GetExtendedTableInfo().ConnectionInfo.ConnectionName))
+            var connectionInfo = tablesInConnection.First().GetExtendedTableInfo().ConnectionInfo;
+            builder.AppendLine("-- " + connectionInfo.ConnectionName);
+            builder.AppendLine("-- " + connectionInfo.ConnectionString);
+        }
+
+        protected override void WriteTable(DataTable table)
+        {
+            builder.AppendLine(BuildCommentForTable(table));
+            foreach (var dataRow in table.AsEnumerable())
             {
-                var connectionInfo = t.GetExtendedTableInfo().ConnectionInfo;
-                if (prevConnecitonName != connectionInfo.ConnectionName)
-                {
-                    builder.AppendLine("-- " + connectionInfo.ConnectionName);
-                    builder.AppendLine("-- " + connectionInfo.ConnectionString);
-                    prevConnecitonName = connectionInfo.ConnectionName;
-                }
-
-                builder.AppendLine(BuildCommentForTable(t));
-                foreach (var dataRow in t.AsEnumerable())
-                {
-                    builder.AppendLine($"INSERT INTO {BuildTableName(t)} ({BuildFieldNamesString(t)}) VALUES({BuildValuesString(dataRow)})");
-                }
-
-                builder.AppendLine();
+                builder.AppendLine($"INSERT INTO {BuildTableName(table)} ({BuildFieldNamesString(table)}) VALUES({BuildValuesString(dataRow)})");
             }
-
-            return builder.ToString();
         }
 
         private string BuildFieldNamesString(DataTable dataTable)

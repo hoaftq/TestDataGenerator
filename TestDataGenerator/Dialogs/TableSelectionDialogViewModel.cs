@@ -65,7 +65,13 @@ namespace TestDataGenerator.Dialogs
         {
             MetaDBReaderFactory readerFactory = new MetaDBReaderFactory();
             var reader = readerFactory.CreateReader(newConnection as ConnectionModel);
-            Tables = reader.GetAllTables().Select(t =>
+            var allTables = reader.GetAllTables();
+            if (allTables == null)
+            {
+                return;
+            }
+
+            Tables = allTables.Select(t =>
             {
                 bool isSelected = SelectedTables.Any(s => s.ConnectionInfo == t.ConnectionInfo
                                                           && s.DatabaseName == t.DatabaseName

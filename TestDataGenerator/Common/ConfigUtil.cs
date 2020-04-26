@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
@@ -28,7 +29,15 @@ namespace TestDataGenerator.Common
 
         public static ObservableCollection<ConnectionModel> LoadConnections()
         {
-            return SerializationUtil.Deserialize<ObservableCollection<ConnectionModel>>(Path.Combine(configPath, CONNECTION_FILE_NAME));
+            try
+            {
+                return SerializationUtil.Deserialize<ObservableCollection<ConnectionModel>>(Path.Combine(configPath, CONNECTION_FILE_NAME));
+            }
+            catch(Exception ex)
+            {
+                // TODO log?
+                return new ObservableCollection<ConnectionModel>();
+            }
         }
 
     }

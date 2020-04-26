@@ -5,6 +5,8 @@ namespace TestDataGeneratorLib.Writer
 {
     public interface IWriter
     {
-        object Write(List<DataTable> tables);
+        void Write(IEnumerable<DataTable> tables);
+
+        object Output { get; }
     }
 }
