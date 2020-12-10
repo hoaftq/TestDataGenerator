@@ -1,5 +1,5 @@
 ### TestDataGenerator
-A tool to support creating test data automatically for most database systems which support ODBC
+A tool that support creating test data automatically for most database systems which support ODBC
 
 During testing phase, tester or developer has experienced a lot situations when they have to create data from scratch for tables related to their functions. 
 It's painfull to fill many rows of a table with a lot of columns. Just few of columns are really important and used by the functions so they should focus on these columns.
